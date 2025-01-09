@@ -1,0 +1,45 @@
+# Formatting and Linting
+black>=23.3.0          # კოდის ავტომატური ფორმატირება
+flake8>=6.1.0          # კოდის სტილის შემოწმება (PEP8)
+mypy>=1.5.1            # ტიპის შემოწმება
+pylint>=3.0.0          # დეტალური ლინტინგი
+
+# Testing and Coverage
+pytest>=7.4.0          # ტესტირების ჩარჩო
+pytest-cov>=4.1.0      # კოდის დაფარვის სტატისტიკა pytest-ით
+
+# Flask Framework and Dependencies
+Flask>=3.1.0           # მარტივი და მოქნილი ვებ-ფრეიმვორკი
+Werkzeug>=3.1.3        # Flask-ის ქვედა ფრეიმვორკი WSGI მხარდაჭერით
+Jinja2>=3.1.5          # ტემპლეიტის ძრავი Flask-ისთვის
+itsdangerous>=2.2.0    # Flask-ის უსაფრთხოების ბიბლიოთეკა
+click>=8.1.8           # Flask-ის CLI-ის მხარდაჭერა
+blinker>=1.9.0         # Flask-სიგნალების მხარდაჭერა
+
+# Requests and Networking
+requests>=2.32.0       # HTTP მოთხოვნები
+urllib3>=2.3.0         # HTTP კავშირის მართვა
+idna>=3.10             # საერთაშორისო დომენების მხარდაჭერა
+certifi>=2024.12.14    # სერთიფიკატების პაკეტი უსაფრთხო HTTPS-სთვის
+charset-normalizer>=3.4.1 # სიმბოლოების კოდირების მხარდაჭერა
+
+# PySide6 and Desktop Applications
+PySide6>=6.8.1         # Qt5-ის Python ბიბლიოთეკა UI-ისთვის
+PySide6_Addons>=6.8.1  # PySide6 დამატებითი კომპონენტები
+PySide6_Essentials>=6.8.1 # PySide6 აუცილებელი კომპონენტები
+shiboken6>=6.8.1       # PySide6-ის დაბალი დონის მხარდაჭერა
+
+# PyInstaller and Packaging
+pyinstaller>=6.11.1    # Python აპლიკაციების კომპილაცია
+pyinstaller-hooks-contrib>=2024.11 # PyInstaller-ის მოდულები
+
+# Utility Libraries
+configparser>=7.1.0    # კონფიგურაციის ფაილების დამუშავება
+MarkupSafe>=3.0.2      # უსაფრთხო HTML სტრიქონების შექმნა
+packaging>=24.2        # პაკეტების მართვა
+iniconfig>=2.0.0       # pytest-ის კონფიგურაციის დამუშავება
+pluggy>=1.5.0          # pytest-ის პლაგინების სისტემა
+
+# Core Libraries
+setuptools>=75.7.0     # Python პაკეტების ინსტალაციის მენეჯერი
+

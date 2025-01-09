@@ -1,0 +1,45 @@
+{
+    // ვირტუალური გარემოს ინტერპრეტატორის მითითება
+    "python.pythonPath": "./.venv/bin/python",
+    // კოდის ფორმატირების პარამეტრები
+    "python.formatting.provider": "black",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit"
+    },
+    // ლინტინგის პარამეტრები
+    "python.linting.enabled": true,
+    "python.linting.flake8Enabled": true,
+    "python.linting.mypyEnabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.linting.mypyArgs": [
+        "--ignore-missing-imports"
+    ],
+    "python.linting.pylintArgs": [
+        "--disable=C0114,C0115,C0116",
+        "--max-line-length=88"
+    ],
+    "python.linting.flake8Args": [
+        "--max-line-length=88"
+    ],
+    // ტესტირების პარამეტრები
+    "python.testing.pytestEnabled": true,
+    // ფაილების გამორიცხვა პროექტის სტრუქტურიდან
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/*.pyc": true
+    },
+    // მოდულების დამატებითი გზები (საჭიროებისამებრ)
+    "python.analysis.extraPaths": [
+        "./src",
+        "./lib"
+    ],
+    // ტიპის შემოწმების რეჟიმი
+    "python.analysis.typeCheckingMode": "off",
+    // ტერმინალში ვირტუალური გარემოს ავტომატური გააქტიურება
+    "python.terminal.activateEnvironment": true,
+    // Black-ის დამატებითი პარამეტრები
+    "python.formatting.blackArgs": [
+        "--line-length=88"
+    ]
+}
