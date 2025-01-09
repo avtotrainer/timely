@@ -24,6 +24,9 @@ class ScheduleApp(QMainWindow):
     def __init__(self):
         super().__init__()
         self.config = self.load_config()
+        self.language = "ka"  # ენას ავირჩევთ აქ (ka ან en)
+        self.translations = self.load_translations(self.language)
+
         self.init_ui()
 
     def load_config(self):
@@ -36,26 +39,60 @@ class ScheduleApp(QMainWindow):
         config.read("config.ini")
         return config["DEFAULT"]
 
+    def load_translations(self, language="ka"):
+        """
+        ჩატვირთავს მხოლოდ მითითებულ ენის სექციას translations.ini ფაილიდან.
+
+        Args:
+            language (str): ენის კოდი (მაგ., "ka" ან "en").
+
+        Returns:
+            dict: მითითებული ენის სექცია.
+        """
+        lang_sections = configparser.ConfigParser()
+        translations_path = os.path.join(os.path.dirname(__file__), "translations.ini")
+        lang_sections.read(translations_path)
+
+        # თუ სექცია არსებობს, დავაბრუნოთ ის, სხვა შემთხვევაში გამონაკლისი
+        if language in lang_sections:
+            return dict(
+                lang_sections[language]
+            )  # ვაბრუნებთ კონკრეტული ენის სექციის მონაცემებს
+        else:
+            raise KeyError(f"სექცია '{language}' არ მოიძებნა translations.ini ფაილში.")
+
+    def translate(self, key):
+        """
+        თარგმნისთვის გამოსაყენებელი ფუნქცია.
+
+        Args:
+            key (str): გასაღები.
+
+        Returns:
+            str: თარგმანი ან სარეზერვო ტექსტი.
+        """
+        return self.translations.get(key, key)  # თუ გასაღები არ მოიძებნა, დაბრუნდეს key
+
     def init_ui(self):
         """
-        Initializes the graphical user interface (GUI).
+        გრაფიკული ინტერფეისის ინიციალიზაცია.
         """
-        self.setWindowTitle("Schedule Generator")
+        self.setWindowTitle(self.translate("generate_and_upload"))
         layout = QVBoxLayout()
         self.inputs = {}
 
-        # Add input fields for configurable parameters
+        # დავამატოთ ტექსტები ქართულად
         for key, value in self.config.items():
-            if key in ["github_token", "github_repo"]:  # Skip token and repo in GUI
+            if key in ["github_token", "github_repo"]:  # არ ვაჩვენებთ ამ ველებს
                 continue
-            label = QLabel(f"{key.capitalize()}:")
+            label = QLabel(self.translate(key))
             input_field = QLineEdit(value)
             layout.addWidget(label)
             layout.addWidget(input_field)
             self.inputs[key] = input_field
 
-        # Add Generate and Upload button
-        self.generate_button = QPushButton("Generate and Upload")
+        # დავამატოთ ღილაკი "შექმნა და ატვირთვა"
+        self.generate_button = QPushButton(self.translate("generate_and_upload"))
         self.generate_button.clicked.connect(self.generate_and_upload)
         layout.addWidget(self.generate_button)
 
