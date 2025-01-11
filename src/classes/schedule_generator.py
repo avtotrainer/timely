@@ -1,7 +1,5 @@
 from datetime import datetime, timedelta
 
-# import os
-
 
 class ClassSchedule:
     def __init__(
@@ -21,26 +19,31 @@ class ClassSchedule:
         self.total_lessons = total_lessons
 
     def generate_schedule(self, school_code):
+        """
+        Generates a schedule and returns it along with the file name.
+
+        Args:
+            school_code (str): Unique school code for the file name.
+
+        Returns:
+            tuple: (list of schedule strings, file name)
+        """
         schedule = []
         current_time = self.start_time
         for lesson in range(1, self.total_lessons + 1):
-            lesson_in = current_time.strftime("%M %H")
+            lesson_in = current_time.strftime("%H:%M")
             current_time += self.lesson_duration
-            lesson_out = current_time.strftime("%M %H")
+            lesson_out = current_time.strftime("%H:%M")
 
-            schedule.append(f"{lesson_in} * *  1-5 sudo /home/tc/bell.c in")
-            schedule.append(f"{lesson_out} * *  1-5 sudo /home/tc/bell.c out")
+            schedule.append(f"{lesson_in} * * 1-5 bell.c in")
+            schedule.append(f"{lesson_out} * * 1-5 bell.c out")
 
             if lesson < self.total_lessons:
-                if lesson == self.long_break_after:
-                    current_time += self.long_break
-                else:
-                    current_time += self.short_break
+                current_time += (
+                    self.long_break
+                    if lesson == self.long_break_after
+                    else self.short_break
+                )
 
         file_name = school_code
-        with open(file_name, "w") as file:
-            for idx, entry in enumerate(schedule):
-                if idx % 2 == 0:
-                    file.write(f"\n# ᲒᲐᲙᲕᲔᲗᲘᲚᲘ {idx // 2 + 1}\n")
-                file.write(entry + "\n")
-        return file_name
+        return schedule, file_name

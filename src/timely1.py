@@ -1,8 +1,18 @@
-import os
 import configparser
-from PySide6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QLabel, QLineEdit, QPushButton, QWidget
-
+import os
+from PySide6.QtWidgets import (
+    QApplication,
+    QMainWindow,
+    QVBoxLayout,
+    QLabel,
+    QLineEdit,
+    QPushButton,
+    QWidget,
+)
 from classes import ClassSchedule, Uploader
+
+# from classes.uploader import Uploader
+
 
 class ScheduleApp(QMainWindow):
     def __init__(self):
@@ -12,68 +22,42 @@ class ScheduleApp(QMainWindow):
         self.translations = self.load_translations(self.language)
         self.init_ui()
 
-    def get_config_path(self):
-        """
-        Searches for the configuration file in standard locations.
-        Returns:
-            str: Path to the configuration file.
-        Raises:
-            FileNotFoundError: If the configuration file is not found.
-        """
-        home_config = os.path.expanduser("~/.config/timely/config.ini")
-        if os.path.exists(home_config):
-            return home_config
-        system_config = "/usr/share/timely/config.ini"
-        if os.path.exists(system_config):
-            return system_config
-        raise FileNotFoundError("Configuration file not found.")
-
-    def get_translations_path(self):
-        """
-        Searches for the translations file in standard locations.
-        Returns:
-            str: Path to the translations file.
-        Raises:
-            FileNotFoundError: If the translations file is not found.
-        """
-        home_translations = os.path.expanduser("~/.config/timely/translations.ini")
-        if os.path.exists(home_translations):
-            return home_translations
-        system_translations = "/usr/share/timely/translations.ini"
-        if os.path.exists(system_translations):
-            return system_translations
-        raise FileNotFoundError("Translations file not found.")
+    
 
     def load_config(self):
         """
-        Loads the configuration file.
-        Returns:
-            configparser.SectionProxy: The default configuration section.
+        Loads the configuration from config.ini.
         """
         config = configparser.ConfigParser()
-        config.read(self.get_config_path())
+        config.read("config.ini")  # Ensure the correct path to config.ini
         return config["DEFAULT"]
 
     def load_translations(self, language="ka"):
         """
-        Loads the translations file.
-        Args:
-            language (str): Language code for translations.
-        Returns:
-            dict: Translations for the specified language.
-        Raises:
-            KeyError: If the specified language section is not found.
+        Loads translations from translations.ini for the specified language.
         """
         lang_sections = configparser.ConfigParser()
-        lang_sections.read(self.get_translations_path())
+        translations_path = os.path.join(os.path.dirname(__file__), "translations.ini")
+        lang_sections.read(translations_path)
+
         if language in lang_sections:
             return dict(lang_sections[language])
         else:
-            raise KeyError(f"Translation section '{language}' not found in translations.ini")
+            raise KeyError(
+                f"Translation section '{language}' not found in translations.ini"
+            )
+
+    def translate(self, key):
+        """
+        Translates a given key using the loaded translations.
+        """
+        return self.translations.get(
+            key, key
+        )  # Default to key if translation not found
 
     def init_ui(self):
         """
-        Initializes the UI components.
+        Initializes the GUI and populates fields with default values and translations.
         """
         self.setWindowTitle(self.translate("generate_and_upload"))
         layout = QVBoxLayout()
@@ -97,16 +81,6 @@ class ScheduleApp(QMainWindow):
         container = QWidget()
         container.setLayout(layout)
         self.setCentralWidget(container)
-
-    def translate(self, key):
-        """
-        Translates a given key using the loaded translations.
-        Args:
-            key (str): The translation key.
-        Returns:
-            str: The translated text or the key itself if not found.
-        """
-        return self.translations.get(key, key)
 
     def generate_and_upload(self):
         """
